@@ -40,7 +40,7 @@ public final class CSVReader {
 
             List<CSVRecord> records = csvParser.getRecords();
 
-            ForkJoinPool pool = new ForkJoinPool(100);
+            ForkJoinPool pool = new ForkJoinPool(200);
 
             pool.submit(() ->
                     records.parallelStream().forEach(csvRecord -> {
