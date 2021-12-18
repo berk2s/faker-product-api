@@ -69,7 +69,6 @@ public final class CSVReader {
             log.warn("Error while parsing csv file {}", exception.getMessage());
             throw new CSVParsingException(ErrorDesc.CSV_PARSING_ERROR.getDesc());
         }
-
     }
 
 }
