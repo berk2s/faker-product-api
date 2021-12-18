@@ -35,7 +35,7 @@ public class ProductController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ProductDto>> getProducts(@RequestParam(defaultValue = "0") Integer page,
-                                                        @RequestParam(defaultValue = "5") Integer size,
+                                                        @RequestParam(defaultValue = "12") Integer size,
                                                         @RequestParam(defaultValue = "createdAt") String sort,
                                                         @RequestParam(defaultValue = "asc") String order,
                                                         @RequestParam(defaultValue = "") String search) {
