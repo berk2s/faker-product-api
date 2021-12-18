@@ -6,12 +6,14 @@ import com.berk2s.talent.productapi.web.models.ErrorDesc;
 import com.berk2s.talent.productapi.web.models.FormattedCSVRecord;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -31,71 +33,43 @@ public final class CSVReader {
             CSVParser csvParser = new CSVParser(bufferedReader,
                     CSVFormat.DEFAULT
                             .withFirstRecordAsHeader()
-                            .withDelimiter(';')
-                            .withQuote(null));
+                            .withDelimiter(',')
+                            .withNullString(""));
 
             List<FormattedCSVRecord> formattedRecords = new ArrayList<>();
 
-            ObjectMapper objectMapper = new ObjectMapper();
-
             List<CSVRecord> records = csvParser.getRecords();
 
-            ForkJoinPool pool = new ForkJoinPool(100);
+            records.forEach(csvRecord -> {
+                if (csvRecord.size() >= csvParser.getHeaderMap().size()) {
+                    FormattedCSVRecord formattedCSVRecord = new FormattedCSVRecord();
 
-            pool.submit(() ->
-                    records.parallelStream().forEach(csvRecord -> {
-                        if (csvRecord.size() >= csvParser.getHeaderMap().size()) {
-                            try {
-                                FormattedCSVRecord formattedCSVRecord = new FormattedCSVRecord();
-                                formattedCSVRecord.setProductName(csvRecord.get(CSVTemplate.PRODUCT_NAME.getCsvText()).replace("\"", ""));
-                                formattedCSVRecord.setProductId(csvRecord.get(CSVTemplate.PRODUCT_ID.getCsvText()).replace("\"", ""));
-                                formattedCSVRecord.setListingPrice(Integer.parseInt(csvRecord.get(CSVTemplate.LISTING_PRICE.getCsvText()).replace("\"", "")));
-                                formattedCSVRecord.setSalePrice(Integer.parseInt(csvRecord.get(CSVTemplate.SALE_PRICE.getCsvText()).replace("\"", "")));
-                                formattedCSVRecord.setDiscount(Integer.parseInt(csvRecord.get(CSVTemplate.DISCOUNT.getCsvText()).replace("\"", "")));
-                                formattedCSVRecord.setBrand(csvRecord.get(CSVTemplate.BRAND.getCsvText()).replace("\"", ""));
-                                formattedCSVRecord.setDescription(csvRecord.get(CSVTemplate.DESCRIPTION.getCsvText()).replace("\"", ""));
+                    formattedCSVRecord.setProductName(new Faker().commerce().productName());
+                    formattedCSVRecord.setListingPrice(csvRecord.get(CSVTemplate.CURRENT_PRICE.getCsvText()));
+                    formattedCSVRecord.setSalePrice(csvRecord.get(CSVTemplate.RAW_PRICE.getCsvText()));
+                    formattedCSVRecord.setDiscount(csvRecord.get(CSVTemplate.DISCOUNT.getCsvText()));
+                    formattedCSVRecord.setBrand(csvRecord.get(CSVTemplate.CATEGORY.getCsvText()));
+                    formattedCSVRecord.setDescription(csvRecord.get(CSVTemplate.NAME.getCsvText()));
+                    formattedCSVRecord.setProductId(csvRecord.get(CSVTemplate.SKU.getCsvText()));
 
-                                String imageVal = csvRecord.get(CSVTemplate.IMAGES.getCsvText());
+                    String productImage = csvRecord.get(CSVTemplate.IMAGE_URL.getCsvText());
+                    String thumbnail = csvRecord.get(CSVTemplate.THUMBNAIL.getCsvText());
+                    String variation = csvRecord.get(CSVTemplate.THUMBNAIL_IMAGE.getCsvText());
+                    formattedCSVRecord.getImages().add(productImage);
+                    formattedCSVRecord.getImages().add(thumbnail);
+                    formattedCSVRecord.getImages().add(variation);
 
-                                if (!imageVal.matches("-?(0|[1-9]\\\\d*)")) {
-                                    String mutatedImage = imageVal
-                                            .replace("\"\"", "\"")
-                                            .replace("\"[", "[")
-                                            .replace("]\"", "]");
+                    formattedRecords.add(formattedCSVRecord);
 
-                                    String[] images = objectMapper.readValue(mutatedImage, String[].class);
-
-                                    Arrays.stream(images).parallel().forEach(imageUrl -> {
-                                        try {
-                                            log.info("Connection is preparing...");
-                                            URL url = new URL(imageUrl);
-                                            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                                            httpURLConnection.setRequestMethod("HEAD");
-
-                                            if (httpURLConnection.getResponseCode() == 200) {
-                                                formattedCSVRecord.getImages().add(imageUrl);
-                                            }
-                                        } catch (IOException e) {
-                                            log.warn("Something went wrong {}", e.getMessage());
-                                            throw new RuntimeException(e.getMessage());
-                                        }
-                                    });
-                                }
-
-                                formattedRecords.add(formattedCSVRecord);
-                            } catch (JsonProcessingException e) {
-                                log.warn("Error while parsing cvs images field {}", e.getMessage());
-                                throw new CSVParsingException(ErrorDesc.CSV_PARSING_ERROR.getDesc());
-                            }
-                        }
-                    })).get();
-
+                }
+            });
 
             return formattedRecords;
-        } catch (Exception e) {
-            log.warn("Error while parsing csv file {}", e.getMessage());
+        } catch (Exception exception) {
+            log.warn("Error while parsing csv file {}", exception.getMessage());
             throw new CSVParsingException(ErrorDesc.CSV_PARSING_ERROR.getDesc());
         }
+
     }
 
 }

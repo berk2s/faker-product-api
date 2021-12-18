@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 @Entity
 public class Product extends BaseEntity {
 
-    @Column(name = "product_external_id", unique = true)
+    @Column(name = "product_external_id")
     private String productExternalId;
 
     @Column(name = "product_name")
@@ -27,13 +28,13 @@ public class Product extends BaseEntity {
     private String description;
 
     @Column(name = "listing_price")
-    private Integer listingPrice;
+    private String listingPrice;
 
     @Column(name = "sale_price")
-    private Integer salePrice;
+    private String salePrice;
 
     @Column(name = "discount")
-    private Integer discount;
+    private String discount;
 
     @Column(name = "rating")
     private Double rating;

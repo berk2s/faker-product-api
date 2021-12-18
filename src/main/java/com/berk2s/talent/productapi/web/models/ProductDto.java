@@ -17,11 +17,11 @@ public class ProductDto {
 
     private String description;
 
-    private Integer listingPrice;
+    private String listingPrice;
 
-    private Integer salePrice;
+    private String salePrice;
 
-    private Integer discount;
+    private String discount;
 
     private Double rating;
 

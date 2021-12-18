@@ -1,5 +1,7 @@
 package com.berk2s.talent.productapi.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.sql.Timestamp;
 
+@Getter
+@Setter
 @MappedSuperclass
 public class BaseEntity {
 

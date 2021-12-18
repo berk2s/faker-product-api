@@ -4,14 +4,18 @@ import lombok.Getter;
 
 @Getter
 public enum CSVTemplate {
-    PRODUCT_NAME("Product Name"),
-    PRODUCT_ID("Product ID"),
-    LISTING_PRICE("Listing Price"),
-    SALE_PRICE("Sale Price"),
-    DISCOUNT("Discount"),
-    BRAND("Brand"),
-    DESCRIPTION("Description"),
-    IMAGES("Images");
+    CATEGORY("category"),
+    SUB_CATEGORY("subcategory"),
+    NAME("name"),
+    CURRENT_PRICE("current_price"),
+    RAW_PRICE("raw_price"),
+    CURRENCY("currency"),
+    DISCOUNT("discount"),
+    LIKES_COUNT("likes_count"),
+    THUMBNAIL("variation_0_thumbnail"),
+    THUMBNAIL_IMAGE("variation_1_image"),
+    IMAGE_URL("image_url"),
+    SKU("model");
 
     private final String csvText;
 

@@ -2,6 +2,7 @@ package com.berk2s.talent.productapi.web.models;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,11 +13,11 @@ public class FormattedCSVRecord {
 
     private String productId;
 
-    private Integer listingPrice;
+    private String listingPrice;
 
-    private Integer salePrice;
+    private String salePrice;
 
-    private Integer discount;
+    private String discount;
 
     private String brand;
 
