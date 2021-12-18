@@ -90,6 +90,7 @@ public final class CSVReader {
                         }
                     })).get();
 
+
             return formattedRecords;
         } catch (Exception e) {
             log.warn("Error while parsing csv file {}", e.getMessage());
