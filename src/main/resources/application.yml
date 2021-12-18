@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://l6glqt8gsx37y4hs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/ht40u5tf2voe8lpf
-    username: k2pk6tvt7w57lr8p
-    password: qg7vme45c8pqd30s
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     generate-ddl: true
     show-sql: true
