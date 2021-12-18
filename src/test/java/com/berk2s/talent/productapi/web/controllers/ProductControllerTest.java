@@ -51,11 +51,10 @@ public class ProductControllerTest {
         @Test
         void getProductsBySearchKey() throws Exception {
 
-            mockMvc.perform(get(ProductController.ENDPOINT + "?page=0&size=12&search=Men"))
+            mockMvc.perform(get(ProductController.ENDPOINT + "?page=0&size=12&search=a"))
                     .andDo(print())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.content.length()", is(12)))
                     .andExpect(jsonPath("$.content..id").isNotEmpty())
                     .andExpect(jsonPath("$.content..productExternalId").isNotEmpty())
                     .andExpect(jsonPath("$.content..productName").isNotEmpty())
