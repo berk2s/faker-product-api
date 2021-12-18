@@ -48,4 +48,8 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Brand brand;
 
+    public void addImage(String image) {
+        productImages.add(image);
+    }
+
 }

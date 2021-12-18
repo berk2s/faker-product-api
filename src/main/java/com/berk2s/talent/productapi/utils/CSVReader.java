@@ -37,15 +37,14 @@ public final class CSVReader {
                 if(csvRecord.size() >= csvParser.getHeaderMap().size()) {
                     try {
                         FormattedCSVRecord formattedCSVRecord = new FormattedCSVRecord();
-                        formattedCSVRecord.setProductName(csvRecord.get(CSVTemplate.PRODUCT_NAME.getCsvText()));
-                        formattedCSVRecord.setProductId(csvRecord.get(CSVTemplate.PRODUCT_ID.getCsvText()));
-                        formattedCSVRecord.setListingPrice(Integer.parseInt(csvRecord.get(CSVTemplate.LISTING_PRICE.getCsvText())));
-                        formattedCSVRecord.setSalePrice(Integer.parseInt(csvRecord.get(CSVTemplate.SALE_PRICE.getCsvText())));
-                        formattedCSVRecord.setDiscount(Integer.parseInt(csvRecord.get(CSVTemplate.DISCOUNT.getCsvText())));
-                        formattedCSVRecord.setBrand(csvRecord.get(CSVTemplate.BRAND.getCsvText()));
-                        formattedCSVRecord.setDescription(csvRecord.get(CSVTemplate.DESCRIPTION.getCsvText()));
-
-
+                        formattedCSVRecord.setProductName(csvRecord.get(CSVTemplate.PRODUCT_NAME.getCsvText()).replace("\"", ""));
+                        formattedCSVRecord.setProductId(csvRecord.get(CSVTemplate.PRODUCT_ID.getCsvText()).replace("\"", ""));
+                        formattedCSVRecord.setListingPrice(Integer.parseInt(csvRecord.get(CSVTemplate.LISTING_PRICE.getCsvText()).replace("\"", "")));
+                        formattedCSVRecord.setSalePrice(Integer.parseInt(csvRecord.get(CSVTemplate.SALE_PRICE.getCsvText()).replace("\"", "")));
+                        formattedCSVRecord.setDiscount(Integer.parseInt(csvRecord.get(CSVTemplate.DISCOUNT.getCsvText()).replace("\"", "")));
+                        formattedCSVRecord.setBrand(csvRecord.get(CSVTemplate.BRAND.getCsvText()).replace("\"", ""));
+                        formattedCSVRecord.setDescription(csvRecord.get(CSVTemplate.DESCRIPTION.getCsvText()).replace("\"", ""));
+                        
                         String imageVal = csvRecord.get(CSVTemplate.IMAGES.getCsvText());
 
                         if (!imageVal.matches("-?(0|[1-9]\\\\d*)")) {
