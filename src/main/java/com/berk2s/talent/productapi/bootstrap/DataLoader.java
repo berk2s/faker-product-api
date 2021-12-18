@@ -66,6 +66,8 @@ public class DataLoader implements CommandLineRunner {
                 product.setRating(rating);
 
                 formattedCSVRecord.getImages().forEach(product::addImage);
+
+                productRepository.save(product);
             });
 
         } catch (FileNotFoundException exception) {
