@@ -42,4 +42,12 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProducts(PageRequest.of(page, size, SortingUtils.generateSort(sort, order)), search), HttpStatus.OK);
     }
 
+    @Operation(summary = "Get Product By Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product is listed")
+    })
+    @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
+        return new ResponseEntity<>(productService.getProductById(productId), HttpStatus.OK);
+    }
 }
