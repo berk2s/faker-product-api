@@ -1,5 +1,7 @@
 package com.berk2s.talent.productapi.web.controllers;
 
+import com.berk2s.talent.productapi.domain.Product;
+import com.berk2s.talent.productapi.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,9 @@ public class ProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @DisplayName("Getting Products")
     @Nested
@@ -65,6 +70,22 @@ public class ProductControllerTest {
                     .andExpect(jsonPath("$.content..rating").isNotEmpty())
                     .andExpect(jsonPath("$.content..productImages").isNotEmpty())
                     .andExpect(jsonPath("$.content..brand..brandName").isNotEmpty());
+
+        }
+
+        @DisplayName("Get Product By Id")
+        @Test
+        void getProductById() throws Exception {
+
+            Product product = new Product();
+            product.setProductName("product name");
+
+            productRepository.save(product);
+
+            mockMvc.perform(get(ProductController.ENDPOINT + "/" + product.getId()))
+                    .andDo(print())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isOk());
 
         }
 
